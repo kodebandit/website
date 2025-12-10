@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Kat's Portfolio Website" />
+
+    <title>Kat Max's Portfolio</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/carousel.css" rel="stylesheet" />
+    <script src="../assets/dist/js/bootstrap.bundle.min.js" class="astro-vvvwv3sm"></script>
+
+    <style>
+        a{
+            text-decoration:none;
+        }
+        p{
+            color:#aaa8ad;
+        }
+        html{
+            scroll-padding-top:50px;
+            scroll-padding-left:max(20vw, 200px);
+        }
+        html, body{
+            overscroll-behavior-y:none;
+        }
+        body{
+            margin:0;
+            padding-top:40px;
+            width:100vw;
+            height:auto;
+            background-color:#1c1d22;
+        }
+        #active-section-display{
+            position:fixed;
+            top:0;
+            left:max(20vw, 200px);
+            width:calc(100% - max(20vw, 200px));
+            height:40px;
+            z-index:2000;
+            background-color:black;
+            color:#AAA8AD;
+            box-shadow:0 5px 15px rgba(0, 0, 0, 0.70);
+            font-size:14px;
+            padding:8px 0;
+            display:flex;
+            align-items:center;
+        }
+
+/* Top Section Tracker */
+        #active-section-display,
+        #terminal-prompt,
+        #section-input,
+        #cd-label{
+            font-family:'Major Mono Display', monospace;
+        }
+        .terminal-command-line{
+            box-sizing:border-box;
+            max-width:900px;
+            width:90%;
+            margin:0 auto;
+            padding:0 3%;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        #terminal-prompt{
+            font-weight:bold;
+            flex-shrink:0;
+        }
+        #current-id{
+            color:#E62815;
+            text-transform:none;
+        }
+        .terminal-command-line label{
+            color:#606467;
+            flex-shrink:0;
+            transition:color 0.1s;
+        }
+        .terminal-command-line label.is-focused{
+            color:#AAA8AD;
+        }
+        #section-input{
+            background-color:transparent;
+            color:#AAA8AD;
+            border:none;
+            padding:2px 6px;
+            width:120px;
+            min-width:50px;
+            flex-grow:1;
+            flex-shrink:1;
+            font-size:14px;
+        }
+        #section-input::placeholder{
+            color:#606467;
+            font-size:0.8em;
+        }
+        #section-input:focus::placeholder{
+            color:#1c1d22;
+        }
+        #section-input:focus{
+            outline:none;
+            border-bottom:1px solid #E62815;
+            box-shadow:none;
+        }
+        #enter-hint{
+            color:#606467;
+            font-size:12px;
+            margin-left:auto;
+            transition:color 0.1s;
+            flex-shrink:0;
+        }
+        #enter-hint.is-focused{
+            color:#E62815;
+        }
+
+/* Side Navigation */
+        #portfolio-sec{
+            position:fixed;
+            top:0;
+            left:0;
+            z-index:1000;
+            height:100%;
+            width:20%;
+            min-width:200px;
+            display:flex;
+            justify-content:center;
+            background-color:black;
+            box-shadow:rgba(0,0,0,0.70) 10px 0 30px 0;
+            padding-top:1rem;
+            padding-bottom:1rem;
+            padding-right:1rem;
+        }
+        #portfolio-sec>#nav-h1 h1{
+            font-size:2em;
+        }
+        #portfolio-sec li{
+            font-size:clamp(16px,1.5vw,24px);
+        }
+        #portfolio-sec>#nav-h1 h1{
+            margin:0 auto;
+            padding:30% 1rem;
+        }
+        .nav{
+            margin-top:25%;
+        }
+        #portfolio-sec li{
+            white-space:nowrap;
+        }
+        #portfolio-sec .nav-link{
+            width:100%;
+            padding-left:42%;
+            box-sizing:border-box;
+            position:relative;
+            z-index:1;
+            color:#606467 !important;
+            border-radius:0 !important;
+        }
+        #portfolio-sec .nav-link::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            height:100%;
+            width:38%;
+            background-color:transparent;
+            z-index:-1;
+            transition:background-color 0.15s ease;
+        }
+        #portfolio-sec > #nav-h1:hover h1{
+            animation-play-state:paused;
+            -webkit-text-fill-color:rgba(255, 255, 255, 1);
+        }
+        #portfolio-sec .nav-link.active, #portfolio-sec .nav-link:hover, #portfolio-sec > #nav-h1:hover h1{
+            color:rgba(255,255,255,1) !important;
+            background-color:transparent !important;
+            border-bottom:#E62815 solid 1px;
+        }
+        #portfolio-sec li.active > .nav-link::before, #portfolio-sec .nav-link:hover::before{
+            background-color:#E62815;
+        }
+        #portfolio-sec .nav-link:active{
+            color: #e62815 !important;
+        }
+        .hidden{
+            display:none;
+        }
+        #portfolio-sec .nav-link:hover .hidden{
+            display:inline;
+            color:white;
+        }
+        #portfolio-sec > #nav-h1 h1{
+            font-size:clamp(20px,1.75vw,30px);
+            font-family:'Major Mono Display', monospace;
+            background:linear-gradient(90deg, #606467 0%, rgba(255,255,255,0.8) 50%, #606467 100%);
+            background-size:200% auto;
+            background-position:-100% 0;
+            -webkit-background-clip:text;
+            background-clip:text;
+            -webkit-text-fill-color:transparent;
+            animation:shimmer 8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+            color:#606467;
+            animation-play-state:running;
+        }
+        @keyframes shimmer{
+            0%{background-position: -100% 0;}
+            100%{background-position: 100% 0;}
+        }
+
+/* Main Content - General/Unsorted */
+        section h2{
+            font-size:1.5em;
+        }
+        .section-title-wrapper{
+            position:relative;
+            margin-bottom:8%;
+            padding:0;
+        }
+        .section-h1{
+            font-family:'Major Mono Display', monospace;
+            font-size:3em;
+            text-align:right;
+            margin-bottom:-0.5em;
+            color:#606467;
+            height:fit-content;
+            display:block;
+            width:100%;
+        }
+        #inner-container{
+            margin-left:max(20vw, 200px);
+            width:calc(100% - max(20vw, 200px));
+            height:auto;
+        }
+        section{
+            /*border:red solid 1px;*/
+            box-sizing:border-box;
+            max-width:900px;
+            width:90%;
+            margin:0 auto;
+            padding:2% 8% 6%;
+            background-color:black;
+            height:100vh;
+            min-width:550px;
+        }
+        section > *:not(.section-h1):first-of-type{
+            margin-top:0 !important;
+        }
+        .foreground-h2, .skills.section-title-wrapper.foreground-h2{
+           position:absolute !important;
+           top:0;
+           left:0;
+           font-size:3em;
+           font-family:'Major Mono Display', monospace;
+           color:white;
+           z-index:2;
+           margin-top:0 !important;
+           padding-left:0 !important;
+       }
+
+/* Main Content - Home Section */
+        section.home{
+            height:100vh;
+            align-content:center;
+            padding:4% 5%;
+        }
+        section.home #headings{
+            text-align:center;
+        }
+        section.home h1{
+            width:100%;
+            color:#606467;
+        }
+        section.home h1:last-of-type{
+            padding-bottom:15%;
+        }
+        .cycle{
+            color:#606467;
+            animation:color-shift 8s infinite alternate;
+            animation-delay:4s;
+        }
+        @keyframes color-shift{
+            0%{color:#606467;}
+            33%{color:#fff;}
+            66%{color:#e62815;}
+            100%{color:#fff;}
+        }
+        #call-to-action{
+            align-content:center;
+            display:flex;
+            justify-content:space-between;
+            width:84%;
+            margin:0 7%;
+        }
+        #call-to-action a{
+            color:#AAA8AD;
+            font-family:'Major Mono Display', monospace;
+        }
+        #call-to-action a:hover{
+            color:#E62815;
+            border-bottom:#E62815 solid 1px;
+            border-right:1px solid #E62815;
+        }
+        #call-to-action span{
+            width:fit-content;
+            padding:0 0.75em 0 0;
+        }
+        #call-to-action a{
+            font-size:1em;
+        }
+
+/* Main Content - Profile Section */
+        section.profile{
+            height:90vh;
+        }
+        .profile-content-wrapper{
+            padding:10% 5%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:40px;
+        }
+        .profile-photo{
+            width:40%;
+        }
+        .profile-photo .profile-img{
+            display:block;
+            width:100%;
+            height:auto;
+            border-radius:0;
+        }
+        .profile-text{
+            display:flex;
+            width:60%;
+            height:inherit;
+            align-content:center;
+            text-indent:1em;
+            color:#6c757d;
+        }
+
+/* Main Content - Skills Section */
+        #skills-marquee-container{
+            overflow:hidden;
+            white-space:nowrap;
+            width:100%;
+            box-sizing:border-box;
+            padding:0.25em;
+        }
+        #skills-marquee-content{
+            display: inline-block;
+            width:200%;
+            animation:marquee 45s linear infinite;
+            font-size:1em;
+            color:#AAA8AD;
+            font-family:'Major Mono Display', monospace;
+            text-transform:lowercase;
+        }
+        #skills-marquee-container:hover #skills-marquee-content{
+            animation-play-state:paused;
+        }
+        @keyframes marquee{
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+        }
+        #skills-marquee-content p{
+            margin:0;
+            display:inline;
+        }
+        #resume-wrapper{
+            margin-top:0;
+            position:relative;
+        }
+        #resume-wrapper::before{
+            content:none;
+        }
+        .resume-entry.no-border{
+            border-bottom:none;
+        }
+        .resume-entry{
+            display:block;
+            padding:15px 1em;
+            border-bottom:1px solid #606467;
+        }
+        .resume-entry:last-child{
+            border-bottom:none;
+        }
+        .entry-metadata-row{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            margin-bottom:5px;
+        }
+        .entry-date{
+            font-family:'Major Mono Display', monospace;
+            flex-basis:auto;
+            flex-shrink:1;
+            margin-right:15px;
+            margin-bottom:0;
+            font-size:0.9em;
+            color:#606467;
+            text-transform:lowercase;
+            font-weight:500;
+            letter-spacing:0.5px;
+        }
+        .entry-content{
+            flex-grow:1;
+            position:static;
+            margin-top:0;
+        }
+        .entry-title{
+            font-size:1.1em;
+            font-weight:bold;
+            color:#E62815;
+            margin-bottom:5px;
+        }
+        .entry-location{
+            font-size:0.9em;
+            font-weight:400;
+            color:#606467;
+            margin-bottom:0;
+            font-style:italic;
+            padding-left:0;
+            text-align:right;
+        }
+        .entry-content p{
+            margin-top:0;
+            margin-bottom:0;
+            font-size:0.95em;
+            color:#aaa8ad;
+            white-space:pre-line;
+            padding-left:1.5em;
+            padding-right:1.5em;
+            text-indent:-1em;
+        }
+        .entry-content p:last-child{
+            margin-bottom:0.75em;
+        }
+        section.skills{
+            height:auto;
+            min-height:100vh;
+        }
+        section.skills h2{
+            margin-top:1em;
+            margin-bottom:0.0125em;
+            padding-left:0.7em;
+            padding-right:0.7em;
+        }
+        section.skills .skills-section-head{
+            color:#606467 !important;
+        }
+        section.skills h3{
+            margin-top:1.25em;
+            margin-bottom:0.25em;
+        }
+
+    /* Main Content - Works Section */
+        #myCarouselRide{
+            width:100%;
+            height:70%;
+            top:13%;
+            margin:10% auto 0;
+            position:relative;
+        }
+        .carousel-inner{
+            width:100%;
+            height:100%;
+            background-color:black;
+            margin-bottom:0;
+        }
+        .carousel-control-prev, .carousel-control-next{
+            width:10%;
+            opacity:1;
+            transition:all 0.2s ease-in-out;
+            background:none;
+        }
+        .carousel-control-prev{
+            background-image:linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+        }
+        .carousel-control-next{
+            background-image:linear-gradient(to left, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+        }
+        #myCarouselRide button:hover{
+            background-color:#E62815;
+            opacity:1;
+        }
+        .carousel-control-prev:hover .carousel-control-prev-icon, .carousel-control-next:hover .carousel-control-next-icon{
+            filter:invert(0) grayscale(100%) brightness(10%);
+        }
+        .carousel-item{
+            height:inherit;
+            width:inherit;
+            z-index:1;
+        }
+        .carousel-item img{
+            image-rendering:pixelated;
+            filter:grayscale(100%);
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            object-position:bottom;
+        }
+        .carousel-caption{
+            padding:2% 2% 0;
+            text-align:left;
+            color:white;
+            background:linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 70%, rgba(0,0,0,0) 100%);
+            top:0;
+            right:5%;
+            left:5%;
+            height:25%;
+            width:80%;
+            margin:0 auto;
+        }
+        .carousel-caption h5{
+            font-size:1.2em;
+            font-weight:200;
+            text-shadow:black 3px 3px 1px;
+            border-bottom:#E62815 solid 1px;
+        }
+
+    /* Main Content - Education/Acknowledgements Section */
+        .file-hologram-wrapper{
+            perspective:800px;
+            padding:0;
+            margin:10% 0 0;
+            width:auto;
+            max-width:600px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
+        .hologram-base{
+            width:250px;
+            height:10px;
+            background-color:transparent;
+            border-radius:50%;
+            border:1px solid black;
+            transform:rotateX(75deg);
+            margin-top:-5px;
+            transition:border-color 0.3s;
+        }
+        .file-hologram-wrapper:hover .hologram-base{
+            border-color:#e62815;
+        }
+        .hologram-grid{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:40px;
+            padding:30px 0;
+        }
+        .top-card-row{
+            width:100%;
+            display:flex;
+            justify-content:center;
+        }
+        .bottom-card-row{
+            width:100%;
+            display:flex;
+            justify-content:center;
+            gap:50px;
+        }
+        @keyframes shimmer-card{
+            0%{ background-position: -200% 0; }
+            100%{ background-position: 200% 0; }
+        }
+        .hologram-file-card{
+            text-decoration:none;
+            display:block;
+            width:250px;
+            min-height:175px;
+            padding:15px;
+            background:linear-gradient(to right,rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0) 100%),rgba(49, 59, 68, 0.7);
+            background-size:200% auto;
+            background-position:-100% 0;
+            animation:shimmer-card 8s infinite linear;
+            transition:transform 0.3s ease, border-top-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+            box-shadow:inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border-top:3px solid #606467;
+            border-radius:3px;
+            transform:translateZ(50px) rotateX(-5deg);
+            transform-origin:bottom center;
+            z-index:2;
+        }
+        .file-hologram-wrapper:hover .hologram-file-card{
+            transform:translateZ(80px) rotateX(-10deg);
+            border-top-color:#e62815;
+            background-color:rgba(230, 40, 21, 0.1);
+            box-shadow:inset 0 0 0 1px rgba(230, 40, 21, 0.5);
+            animation-play-state:paused;
+        }
+        .file-name{
+            font-size:1.1em;
+            font-weight:bold;
+            color:#FFFFFF;
+            margin-bottom:5px;
+        }
+        .file-meta{
+            font-size:0.85em;
+            color:#aaa8ad;
+            font-family:'Major Mono Display', monospace;
+        }
+
+    /* Main Content - Footer Section */
+        section.footer{
+            box-sizing:border-box;
+            height:6vh;
+            line-height:6vh;
+            padding:0 3%;
+            margin:0 auto;
+            align-content:center;
+            display:flex;
+            justify-content:space-between;
+        }
+        section.footer .footer-para, .footer-para a{
+            font-family:"Major Mono Display", monospace;
+            font-size:0.9em;
+            color:#606467;
+        }
+        .footer-para a:hover{
+            color:#e62815;
+        }
+    </style>
+</head>
+    <body>
+        <!-- Top Section Tracker -->
+        <div id="active-section-display" class="section-tracker">
+            <div class="terminal-command-line">
+                <span id="terminal-prompt">kat@max:<span id="current-id">~</span>$ </span>
+
+                <label for="section-input" id="cd-label">cd </label>
+                <input type="text" id="section-input" placeholder="click here to enter a page section to jump to">
+                <span id="enter-hint">[press enter]</span>
+            </div>
+        </div>
+        <!-- Holds Side Nav and Main Content -->
+        <div class="position-absolute" style="width:100%;height:100%;margin:0;padding:0;">
+            <!-- Side Navigation -->
+            <div id="portfolio-sec" class="d-flex flex-column position-fixed">
+            <a href="#home" id="nav-h1" class="d-flex link-body-emphasis">
+              <h1>kat max</h1>
+            </a>
+
+            <ul class="nav nav-pills flex-column">
+              <li class="menu-choice">
+                <a href="#profile" class="nav-link link-body-emphasis"><span class="hidden">cd </span>.profile</a>
+              </li>
+              <li class="menu-choice">
+                <a href="#skills" class="nav-link link-body-emphasis"><span class="hidden">cd </span>.skills</a>
+              </li>
+              <li class="menu-choice">
+                <a href="#works" class="nav-link link-body-emphasis"><span class="hidden">cd </span>.works</a>
+              </li>
+              <li class="menu-choice">
+                <a href="#edu-acks" class="nav-link link-body-emphasis"><span class="hidden">cd </span>.edu-acks</a>
+              </li>
+            </ul>
+        </div>
+            <!-- Main Content -->
+            <div id="inner-container">
+                <!-- Home Section -->
+                <section class="home" id="home">
+                    <div id="headings">
+                        <h1>Hi. My name's <span class="cycle">Kat</span>.</h1>
+                        <h1>I love <span class="cycle">scripting</span> and <span class="cycle">Linux</span>.</h1>
+                        <h1><span class="cycle">Let's work together.</span></h1>
+                    </div>
+                    <div id="call-to-action">
+                        <a href="mailto:kat.brown@georgebrown.ca"><span>email</span></a>
+                        <a href="#works"><span>my work</span></a>
+                        <a href="www.linkedin.com/in/kaitlyn-kat-brown" target="_blank"><span>linkedin</span></a>
+                    </div>
+                </section>
+                <!-- Profile Section -->
+                <section class="profile" id="profile">
+                    <div class="section-title-wrapper">
+                        <h1 class="section-h1">.profile</h1>
+                        <h2 class="foreground-h2">profile</h2>
+                    </div>
+                    <div class="profile-content-wrapper">
+                        <div class="profile-photo">
+                            <img src="../img/self.JPG" alt="Photo of myself" class="profile-img">
+                        </div>
+                        <div class="profile-text">
+                            <p>I am a Toronto-based, tech-loving innovator, code-instigator, and Linux system navigator. My passion is Linux-based servers, though I am comfortable with Windows Server 2016 as well. Local and server-based imaging in professional institutions showed me the beauty of automation, and education further amplifies my abilities and passions for roles where I can do just that. In early 2025, I learned about Python and the beautiful efficiencies it can provide, as well as shell scripting (mostly with bash shell). Efficiency, redundancy, and reliability are the rules of my game — and I'd love to show you the rules that make my game so fantastic.</p>
+                        </div>
+                    </div>
+                </section>
+                <!-- Skills Section -->
+                <section class="skills" id="skills">
+                    <div class="section-title-wrapper">
+                        <h1 class="section-h1">.skills</h1>
+                        <h2 class="foreground-h2">skills</h2>
+                    </div>
+                    <div id="skills-marquee-container">
+                        <div id="skills-marquee-content">
+                            <p>Bash &bull; Databases &bull; Image Configuration &bull; Job and Performance Monitoring &bull; Python &bull; Risk Management &bull; Storage Device Pooling &bull; User and Group Management &bull; Virtualization &bull; Version Control &bull;</p>
+                            <p>Bash &bull; Databases &bull; Image Configuration &bull; Job and Performance Monitoring &bull; Python &bull; Risk Management &bull; Storage Device Pooling &bull; User and Group Management &bull; Virtualization &bull; Version Control &bull;</p>
+                        </div>
+                    </div>
+                    <div id="resume-wrapper">
+                        <h2 class="skills-section-head">Education</h2>
+                        <div class="resume-entry">
+                            <div class="entry-metadata-row">
+                                <div class="entry-date">Jan. 2025 - Present</div>
+                                <div class="entry-location">George Brown College</div>
+                            </div>
+                            <div class="entry-content">
+                                <div class="entry-title">Advanced Diploma in Computer Systems Technology</div>
+                                <p>> Hosting Linux- and Windows-based servers on VMWare ESX.</p>
+                                <p>> Setup and maintenance of user groups and accounts.</p>
+                                <p>> Disk maintenance including cloning and mirroring.</p>
+                                <p>> Crontab automations.</p>
+                            </div>
+                        </div>
+                        <div class="resume-entry no-border">
+                            <div class="entry-metadata-row">
+                                <div class="entry-date">Jan. 2021 - May 2022</div>
+                                <div class="entry-location">Sheridan College</div>
+                            </div>
+                            <div class="entry-content">
+                                <div class="entry-title">Hon. Bachelor of Business Admin. – Marketing Management</div>
+                                <p>> Confidently assumed top leadership roles to reliably plan and execute tasks, alongside strength- and growth-based role delegation.</p>
+                                <p>> Developed and maintained S&OP resources for planned cross-department simulation software upgrading, identifying required resources and proactively mitigating risks.</p>
+                                <p>> Controlled and coordinated two virtual business simulations which ranked within the top 3 of the class, participating as Project Manager and exceeding expectations for company goals, budgets, and timelines.</p>
+                            </div>
+                        </div>
+                        <h2 class="skills-section-head">Industry-Related Experience</h2>
+                        <div class="resume-entry no-border">
+                            <div class="entry-metadata-row">
+                                <div class="entry-date">Feb. 2016 - Mar. 2017</div>
+                                <div class="entry-location">Durham College/UOIT</div>
+                            </div>
+                            <div class="entry-content">
+                                <div class="entry-title">Computer Support Technician: Level II</div>
+                                <p>> Managed assets with inventory lists, secure updates, DBAN.</p>
+                                <p>> Performed documented hardware upgrades for Unix-based systems.</p>
+                                <p>> Performed non-disruptive software installation, maintenance and upgrades.</p>
+                            </div>
+                        </div>
+                        <h2 class="skills-section-head">Other Related Experience</h2>
+                        <div class="resume-entry">
+                            <div class="entry-metadata-row">
+                                <div class="entry-date">Jan. 2023 - Apr. 2024</div>
+                                <div class="entry-location">The Living Vine</div>
+                            </div>
+                            <div class="entry-content">
+                                <div class="entry-title">Orders and Logistics Coordinator</div>
+                                <p>> Collaborated daily with Accounting, ensuring accurate resource use, forecasting, and reporting.</p>
+                                <p>> Developed and maintained internal systems to automate critical business processes.</p>
+                            </div>
+                        </div>
+                        <div class="resume-entry">
+                            <div class="entry-metadata-row">
+                                <div class="entry-date">Jan. 2019 - Oct. 2020</div>
+                                <div class="entry-location">Canon Canada Inc</div>
+                            </div>
+                            <div class="entry-content">
+                                <div class="entry-title">Customer Service and Support, Clerk</div>
+                                <p>> Reviewed and streamlined process documents, standardizing task flows and procedures.</p>
+                                <p>> Contributed significantly to interdepartmental project in terms of research, QA/QC, data consolidation, and version tracking.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Works Section -->
+                <section class="works lower" id="works">
+                    <div class="section-title-wrapper">
+                        <h1 class="section-h1">.works</h1>
+                        <h2 class="foreground-h2">works /<br />current projects</h2>
+                    </div>
+                    <div id="myCarouselRide" class="carousel slide" data-bs-ride="false" data-bs-keyboard="true">
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <img src="../img/localhost-server-config.jpg" class="d-block w-100" alt="localhost server configuration on linux machine">
+                          <div class="carousel-caption d-none d-md-block">
+                            <h5>Linux-based Localhost Server Configurations</h5>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img src="../img/custom-netmiko-connetion-multiple-routers-commands-scan-parameters.png" class="d-block w-100" alt="custom netmiko connection using pycharm">
+                          <div class="carousel-caption d-none d-md-block">
+                            <h5>In-Depth Router Access Automations and Modifications</h5>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img src="../img/backups.jpg" class="d-block w-100" alt="making backups of Linux files">
+                          <div class="carousel-caption d-none d-md-block">
+                            <h5>Backing Up Important Linux Files (Manual & Schedule)</h5>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img src="../img/embedded_telnet_connect_inside_ssh.png" class="d-block w-100" alt="nested telnet connection after successfully connecting via ssh">
+                          <div class="carousel-caption d-none d-md-block">
+                            <h5>Nested Remote Connections (SSH-to-Telnet)</h5>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img src="../img/in-depth-file-display-system-finding-duplicate-items.png" class="d-block w-100" alt="in-depth file display script to view as tree or list">
+                          <div class="carousel-caption d-none d-md-block">
+                            <h5>"Mostly Hands-Off"Customized File Search and View Solutions</h5>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img src="../img/apache_server_config.jpg" class="d-block w-100" alt="apache setup and configurations">
+                          <div class="carousel-caption d-none d-md-block">
+                            <h5>Local Apache Initiation and Maintenance</h5>
+                          </div>
+                        </div>
+                        <div class="carousel-item">
+                          <img src="../img/in-depth-multi-line-multi-router-connection-config.png" class="d-block w-100" alt="multi-router configurations">
+                          <div class="carousel-caption d-none d-md-block">
+                            <h5>Automated Multi-Router Connecting with Tracked Changes</h5>
+                          </div>
+                        </div>
+                    </div>
+
+                      <button class="carousel-control-prev" type="button" data-bs-target="#myCarouselRide" data-bs-keyboard="true" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+
+                      <button class="carousel-control-next" type="button" data-bs-target="#myCarouselRide" data-bs-keyboard="true" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
+                    </div>
+                </section>
+                <!-- Education/Acknowledgements Section -->
+                <section class="edu-acks lower" id="edu-acks">
+                    <div class="section-title-wrapper">
+                        <h1 class="section-h1">.edu-acks</h1>
+                        <h2 class="foreground-h2">education /<br />acknowledgements</h2>
+                    </div>
+                    <div class="hologram-grid">
+                        <div class="top-card-row">
+                            <div class="file-hologram-wrapper">
+                                <a href="../pdf/transcript-mod.pdf" target="_blank" class="hologram-file-card">
+                                    <div class="file-name">Computer Systems Technology - Transcript [UNOFFICIAL]</div>
+                                    <div class="file-meta">george brown college — 2025 [pdf]</div>
+                                </a>
+                                <div class="hologram-base"></div>
+                            </div>
+                        </div>
+                        <div class="bottom-card-row">
+                            <div class="file-hologram-wrapper">
+                                <a href="../pdf/Dean_letter_100967062%20(1)_Redacted.pdf" target="_blank" class="hologram-file-card">
+                                    <div class="file-name">Dean's List - Winter 2025</div>
+                                    <div class="file-meta">george brown college — 2025 [pdf]</div>
+                                </a>
+                                <div class="hologram-base"></div>
+                            </div>
+                            <div class="file-hologram-wrapper">
+                                <a href="../pdf/Dean_letter_100967062_Redacted.pdf" target="_blank" class="hologram-file-card">
+                                    <div class="file-name">Dean's List - Spring 2025</div>
+                                    <div class="file-meta">george brown college — 2025 [pdf]</div>
+                                </a>
+                                <div class="hologram-base"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Footer Section (no, you can't navigate to this) -->
+                <section class="footer">
+                    <p class="footer-para">&copy; 2025 kat brown-maxwell</p>
+                    <p class="footer-para"><a href="https://getbootstrap.com/" target="_blank">bootstrap v5.3.8</a></p>
+                    <p class="footer-para">on <a href="https://vercel.com/" target="_blank">vercel</a></p>
+                </section>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const sectionAliases = {
+                    ".": "home", "~": "home", "/": "home", "home": "home", "go to top": "home", "top": "home", "start": "home",
+                    "profile": "profile", "me": "profile", ".profile": "profile", "about me": "about",
+                    "skills": "skills", ".skills": "skills", "technical skills": "skills", "experience": "experience",
+                    "works": "works", ".works": "works", "work samples": "works", "projects": "projects", "work": "works", "works / projects": "works",
+                    "edu": "edu-acks", ".edu-acks": "edu-acks", "education-acknowledgements": "edu-acks", "acknowledgements": "edu-acks", "acks": "edu-acks",
+                    "certifications": "edu-acks", "certs": "edu-acks", "transcripts": "edu-acks", "education / acknowledgements": "edu-acks",
+                };
+                const sections = document.querySelectorAll('section');
+                const currentIdDisplay = document.getElementById('current-id');
+                const sectionInput = document.getElementById('section-input');
+                const cdLabel = document.getElementById('cd-label');
+                const enterHint = document.getElementById('enter-hint');
+                const sideNavLinks = document.querySelectorAll('#portfolio-sec a[href^="#"]');
+                const scrollableSections = Array.from(sections).filter(section => section.id);
+
+                let isManualScrolling = false;
+                if (!scrollableSections.length || !currentIdDisplay || !sectionInput || !cdLabel || !enterHint) return;
+                const updateSideNav = (targetId) => {
+                    sideNavLinks.forEach(link => {
+                        link.classList.remove('active');
+                        link.parentElement.classList.remove('active');
+                    });
+                    const activeLink = document.querySelector(`#portfolio-sec a[href="#${targetId}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                        activeLink.parentElement.classList.add('active');
+                    }
+                };
+                const updateCurrentDirectoryDisplay = (targetId) => {
+                    let directorySymbol;
+                    if (targetId === 'home') {
+                        directorySymbol = '~'; // Home section uses ~
+                    } else {
+                        directorySymbol = '/' + targetId; // Other sections use /sectionName
+                    }
+                    currentIdDisplay.textContent = directorySymbol;
+                };
+                const options = {
+                    rootMargin:'-25% 0px -25% 0px',
+                    threshold:0,
+                };
+                const observer = new IntersectionObserver((entries) => {
+                    if (isManualScrolling) return;
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const targetId = entry.target.id;
+                            updateCurrentDirectoryDisplay(targetId);
+                            updateSideNav(targetId);
+                        }
+                    });
+                }, options);
+
+                scrollableSections.forEach(section => observer.observe(section));
+
+                const initialId = scrollableSections[0].id;
+                updateCurrentDirectoryDisplay(initialId);
+                updateSideNav(initialId);
+                const jumpToSection = () => {
+                    let inputTerm = sectionInput.value.trim().toLowerCase();
+                    const targetId = sectionAliases[inputTerm] || inputTerm;
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        isManualScrolling = true;
+                        updateCurrentDirectoryDisplay(targetId);
+                        updateSideNav(targetId);
+                        targetElement.scrollIntoView({
+                            behavior:'smooth',
+                            block:'start'
+                        });
+                        sectionInput.value = '';
+                        setTimeout(() => {
+                            isManualScrolling = false;
+                        }, 800);
+                    } else {
+                        alert(`Directory or ID "${inputTerm}" not found. Try 'profile' or '~'.`);
+                        sectionInput.focus();
+                    }
+                };
+
+                sectionInput.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        jumpToSection();
+                        sectionInput.blur();
+                    }
+                });
+
+                sectionInput.addEventListener('focus', () => {
+                    cdLabel.classList.add('is-focused');
+                    enterHint.classList.add('is-focused');
+                });
+
+                sectionInput.addEventListener('blur', () => {
+                    cdLabel.classList.remove('is-focused');
+                    enterHint.classList.remove('is-focused');
+                });
+
+                sideNavLinks.forEach(link => {
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const targetId = link.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        if (targetElement) {
+                            isManualScrolling = true;
+                            updateCurrentDirectoryDisplay(targetId);
+                            updateSideNav(targetId);
+                            targetElement.scrollIntoView({
+                                behavior:'smooth',
+                                block:'start'
+                            });
+                            setTimeout(() => {
+                                isManualScrolling = false;
+                            }, 800);
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
