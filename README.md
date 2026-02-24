@@ -7,6 +7,9 @@ You can click where the top-navigation placeholder text is, type in a word descr
 
 # PLANS/IDEAS
 Implementation timelines TBD
+* Remove styling that could be stated in HTML file using Bootstrap Utilities
+* Make side nav responsiveness less jank
+* Configure responsiveness overall
 * Modify top-nav
     * Improve UX (readability of the elements themselves, suggestions/fill in on tab)
     * Improve the "works" carousel with proper imagery, descriptions, and sort the full-height button situation out so the caption background doesn't look like hot trash
@@ -21,4 +24,4 @@ This was the first project I completed using any form of AI for assistance, and 
 However, I spent hours working with Gemini to address specific syntax issues, suggesting more streamlined alternatives to what it offered me, and overall making sure the code actually functioned. Easily said, the tool would have been far less useful without prior knowledge of HTML/CSS/JavaScript (though I have much more to refresh on with JS...)
 
 ## Updates
-Feb.23.26 -- Broke it. CSS (moved all styling off of HTML doc and reduced number of css sheets from 2 to 1, removed unused styles and references, consolidated, set up root for easier repetitive trait implementation, removed some styling that could be stated in HTML file using Bootstrap Utilities); HTML (removed some unused classes and the pointless div, fixed improper hyperlink issue)
+Feb.23.26 -- CSS (moved all styling off of HTML doc and reduced number of css sheets from 2 to 1, removed unused styles and references, consolidated, set up root for easier repetitive trait implementation, side nav now condenses down beyond certain screen height); HTML (removed some unused classes and the pointless div, fixed improper hyperlink issue, updated .edu-acks to just .edu); JS (minor changes to aliases)
