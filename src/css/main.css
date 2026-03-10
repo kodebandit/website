@@ -120,7 +120,6 @@ p,.terminal-command-line label.is-focused,#call-to-action a{
     display:flex;
     justify-content:center;
 }
-
 #portfolio-sec > #nav-h1 h1{
     font-size:clamp(20px,1.75vw,30px);
     font-family:var(--terminal-font);
@@ -138,7 +137,7 @@ p,.terminal-command-line label.is-focused,#call-to-action a{
     font-size:clamp(16px,1.5vw,24px);
     white-space:nowrap;
 }
-.nav{
+#side-nav{
     margin-top:25%;
 }
 #portfolio-sec a.nav-link{
@@ -173,7 +172,7 @@ p,.terminal-command-line label.is-focused,#call-to-action a{
 #portfolio-sec li.active > .nav-link::before,#portfolio-sec a.nav-link:hover::before{
     background-color:var(--primary-red);
 }
-.hidden{
+#side-nav .hidden{
     display:none;
 }
 #portfolio-sec .nav-link:hover .hidden{
@@ -232,15 +231,15 @@ section > *:not(.section-h1):first-of-type{
 }
 
     /* Main Content - Home Section */
-section.home{
+section#home{
     height:100vh;
     padding:4% 5%;
     align-content:center;
 }
-section.home #headings{
+section#home #headings{
     text-align:center;
 }
-section.home h1{
+section#home h1{
     color:var(--text-dark);
     width:100%;
 }
@@ -279,7 +278,7 @@ section.home h1:last-of-type{
 }
 
 /* Main Content - Profile Section */
-section.profile{
+section#profile{
     height:90vh;
 }
 .profile-content-wrapper{
@@ -308,6 +307,20 @@ section.profile{
 }
 
 /* Main Content - Skills Section */
+section#skills{
+    height:auto;
+    min-height:100vh;
+}
+section#skills h2{
+    margin-top:1em;
+    margin-bottom:0.0125em;
+    padding-left:0.7em;
+    padding-right:0.7em;
+}
+section#skills h3{
+    margin-top:1.25em;
+    margin-bottom:0.25em;
+}
 #skills-marquee-container{
     overflow:hidden;
     white-space:nowrap;
@@ -399,22 +412,8 @@ section.profile{
 .entry-content p:last-child{
     margin-bottom:0.75em;
 }
-section.skills{
-    height:auto;
-    min-height:100vh;
-}
-section.skills h2{
-    margin-top:1em;
-    margin-bottom:0.0125em;
-    padding-left:0.7em;
-    padding-right:0.7em;
-}
-#inner-container section.skills .skills-section-head{
+#inner-container section#skills .skills-section-head{
     color:var(--text-dark);
-}
-section.skills h3{
-    margin-top:1.25em;
-    margin-bottom:0.25em;
 }
 
 /* Main Content - Works Section */
@@ -487,87 +486,87 @@ section.skills h3{
     border-bottom:var(--primary-red) solid 1px;
 }
 
-/* Main Content - Education/Acknowledgements Section */
-.file-hologram-wrapper{
-    perspective:800px;
-    margin:10% 0 0;
-    width:auto;
-    max-width:600px;
-    padding:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
-.hologram-base{
-    width:250px;
-    height:10px;
-    background-color:transparent;
-    border-radius:50%;
-    border:1px solid black;
-    transform:rotateX(75deg);
-    margin-top:-5px;
-    transition:border-color 0.3s;
-}
-.file-hologram-wrapper:hover .hologram-base{
-    border-color:var(--primary-red);
-}
-.hologram-grid{
-    padding:30px 0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:40px;
-}
-@keyframes shimmer-card{
-    0%{ background-position: -200% 0; }
-    100%{ background-position: 200% 0; }
-}
-.top-card-row,.bottom-card-row{
-    width:100%;
-    display:flex;
-    justify-content:center;
-}
-.bottom-card-row{
-    gap:50px;
-}
-.hologram-file-card{
-    text-decoration:none;
-    width:250px;
-    min-height:175px;
-    padding:15px;
-    background:linear-gradient(to right,rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0) 100%),rgba(49, 59, 68, 0.7);
-    background-size:200% auto;
-    background-position:-100% 0;
-    animation:shimmer-card 8s infinite linear;
-    transition:transform 0.3s ease, border-top-color 0.3s, background-color 0.3s, box-shadow 0.3s;
-    box-shadow:inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    border-top:3px solid var(--text-dark);
-    border-radius:3px;
-    transform:translateZ(50px) rotateX(-5deg);
-    transform-origin:bottom center;
-    z-index:2;
-    display:block;
-}
-.file-hologram-wrapper:hover .hologram-file-card{
-    transform:translateZ(80px) rotateX(-10deg);
-    border-top-color:var(--primary-red);
-    background-color:var(--tertiary-red);
-    box-shadow:inset 0 0 0 1px var(--secondary-red);
-    animation-play-state:paused;
-}
-.file-name{
-    font-size:1.1em;
-    color:white;
-    margin-bottom:5px;
-    font-weight:bold;
-}
-.file-meta{
-    font-size:0.85em;
-    color:var(--text-light);
-}
+/*!* Main Content - Education Section *!*/
+/*.file-hologram-wrapper{*/
+/*    perspective:800px;*/
+/*    margin:10% 0 0;*/
+/*    width:auto;*/
+/*    max-width:600px;*/
+/*    padding:0;*/
+/*    display:flex;*/
+/*    flex-direction:column;*/
+/*    align-items:center;*/
+/*}*/
+/*.hologram-base{*/
+/*    width:250px;*/
+/*    height:10px;*/
+/*    background-color:transparent;*/
+/*    border-radius:50%;*/
+/*    border:1px solid black;*/
+/*    transform:rotateX(75deg);*/
+/*    margin-top:-5px;*/
+/*    transition:border-color 0.3s;*/
+/*}*/
+/*.file-hologram-wrapper:hover .hologram-base{*/
+/*    border-color:var(--primary-red);*/
+/*}*/
+/*.hologram-grid{*/
+/*    padding:30px 0;*/
+/*    display:flex;*/
+/*    flex-direction:column;*/
+/*    align-items:center;*/
+/*    gap:40px;*/
+/*}*/
+/*@keyframes shimmer-card{*/
+/*    0%{ background-position: -200% 0; }*/
+/*    100%{ background-position: 200% 0; }*/
+/*}*/
+/*.top-card-row,.bottom-card-row{*/
+/*    width:100%;*/
+/*    display:flex;*/
+/*    justify-content:center;*/
+/*}*/
+/*.bottom-card-row{*/
+/*    gap:50px;*/
+/*}*/
+/*.hologram-file-card{*/
+/*    text-decoration:none;*/
+/*    width:250px;*/
+/*    min-height:175px;*/
+/*    padding:15px;*/
+/*    background:linear-gradient(to right,rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0) 100%),rgba(49, 59, 68, 0.7);*/
+/*    background-size:200% auto;*/
+/*    background-position:-100% 0;*/
+/*    animation:shimmer-card 8s infinite linear;*/
+/*    transition:transform 0.3s ease, border-top-color 0.3s, background-color 0.3s, box-shadow 0.3s;*/
+/*    box-shadow:inset 0 0 0 1px rgba(255, 255, 255, 0.1);*/
+/*    border-top:3px solid var(--text-dark);*/
+/*    border-radius:3px;*/
+/*    transform:translateZ(50px) rotateX(-5deg);*/
+/*    transform-origin:bottom center;*/
+/*    z-index:2;*/
+/*    display:block;*/
+/*}*/
+/*.file-hologram-wrapper:hover .hologram-file-card{*/
+/*    transform:translateZ(80px) rotateX(-10deg);*/
+/*    border-top-color:var(--primary-red);*/
+/*    background-color:var(--tertiary-red);*/
+/*    box-shadow:inset 0 0 0 1px var(--secondary-red);*/
+/*    animation-play-state:paused;*/
+/*}*/
+/*.file-name{*/
+/*    font-size:1.1em;*/
+/*    color:white;*/
+/*    margin-bottom:5px;*/
+/*    font-weight:bold;*/
+/*}*/
+/*.file-meta{*/
+/*    font-size:0.85em;*/
+/*    color:var(--text-light);*/
+/*}*/
 
 /* Main Content - Footer Section */
-section.footer{
+section#footer{
     box-sizing:border-box;
     height:6vh;
     line-height:6vh;
@@ -577,7 +576,7 @@ section.footer{
     display:flex;
     justify-content:space-between;
 }
-section.footer .footer-para,.footer-para a{
+section#footer .footer-para,.footer-para a{
     font-size:0.9em;
     color:var(--text-dark);
 }
