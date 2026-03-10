@@ -243,7 +243,7 @@ section#home h1{
     color:var(--text-dark);
     width:100%;
 }
-section.home h1:last-of-type{
+section#home h1:last-of-type{
     padding-bottom:15%;
 }
 .cycle{
